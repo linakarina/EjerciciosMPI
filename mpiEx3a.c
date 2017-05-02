@@ -12,20 +12,24 @@ int main(int argc,char *argv[]){
 
 	if (rank == 0) {
 	  dest = 1;
-	  source = 1;
-	  MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+	  source = size-1;
+	  MPI_Send(&rank, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
 	  MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
-	}else if (rank == 1) {
-	  dest = 0;
-	  source = 0;
+		printf("Task %d: Received %d\n",
+		   rank, inmsg);
+
+	}else {
+	  dest = (rank + 1)% size;
+	  source = rank-1;
 	  MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
-	  MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+	  MPI_Send(&rank, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+	  printf("Task %d: Received %d\n",
+		   rank, inmsg);
 	  
 	 }
 
 	MPI_Get_count(&Stat, MPI_INT, &count);
-	printf("Task %d: Received %d char(s) from task %d with tag %d \n",
-		   rank, count, Stat.MPI_SOURCE, Stat.MPI_TAG);
+	
 
 	MPI_Finalize();
 }
