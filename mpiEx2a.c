@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
 	}
     else
 	{
-		printf("Yo soy un proceso con identificador %d de %d procesos en ejecucion!\n", rank,"" + "" size);
+		printf("Yo soy un proceso con identificador %d de %d procesos en ejecucion!\n", rank, size);
 	}
     	
 
